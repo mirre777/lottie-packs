@@ -44,7 +44,7 @@ export default function PackCard({ pack }: { pack: Pack }) {
 
         {/* Format pills */}
         <div className="flex flex-wrap gap-1.5 mt-4">
-          {pack.formats.map((f) => (
+          {pack.formats.map((f: string) => (
             <span key={f} className="text-[10px] font-mono border border-white/10 text-white/40 px-2 py-0.5 rounded-full">
               {f}
             </span>

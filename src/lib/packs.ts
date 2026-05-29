@@ -1,3 +1,8 @@
+export interface AnimationItem {
+  name: string
+  file: string // filename without extension, in /previews/
+}
+
 export interface Pack {
   slug: string
   name: string
@@ -11,7 +16,7 @@ export interface Pack {
   color: string
   accentHex: string
   animationCount: number
-  animations: string[]
+  animations: AnimationItem[]
   keywords: string[]
   useCases: string[]
   formats: string[]
@@ -32,7 +37,13 @@ export const PACKS: Pack[] = [
     color: 'from-indigo-950 to-violet-950',
     accentHex: '#6366F1',
     animationCount: 5,
-    animations: ['Bounce', 'Wave', 'Pulse', 'Elastic', 'Fade chain'],
+    animations: [
+      { name: 'Bounce', file: '01-bounce-dots' },
+      { name: 'Wave', file: '02-wave-dots' },
+      { name: 'Pulse', file: '03-pulse-dots' },
+      { name: 'Elastic', file: '04-elastic-dots' },
+      { name: 'Fade chain', file: '05-fade-dots' },
+    ],
     keywords: [
       'lottie loading animation',
       'loading dots lottie',
@@ -58,7 +69,13 @@ export const PACKS: Pack[] = [
     color: 'from-slate-950 to-emerald-950',
     accentHex: '#10B981',
     animationCount: 5,
-    animations: ['Currency spinner', 'Success check', 'Fund transfer', 'Security shield', 'Bar chart growth'],
+    animations: [
+      { name: 'Currency spinner', file: '01-currency-spinner' },
+      { name: 'Success check', file: '02-success-check' },
+      { name: 'Fund transfer', file: '03-transfer-coin' },
+      { name: 'Security shield', file: '04-security-shield' },
+      { name: 'Bar chart growth', file: '05-bar-chart-growth' },
+    ],
     keywords: [
       'fintech lottie animation',
       'payment success animation',
@@ -84,7 +101,13 @@ export const PACKS: Pack[] = [
     color: 'from-violet-950 to-pink-950',
     accentHex: '#EC4899',
     animationCount: 5,
-    animations: ['Empty inbox', 'No results', 'Cloud upload', 'No notifications', 'Error / broken'],
+    animations: [
+      { name: 'Empty inbox', file: '01-empty-inbox' },
+      { name: 'No results', file: '02-no-results' },
+      { name: 'Cloud upload', file: '03-upload-cloud' },
+      { name: 'No notifications', file: '04-no-notifications' },
+      { name: 'Error / broken', file: '05-error-state' },
+    ],
     keywords: [
       'saas empty state animation',
       'lottie empty state',
@@ -110,7 +133,13 @@ export const PACKS: Pack[] = [
     color: 'from-blue-950 to-pink-950',
     accentHex: '#F472B6',
     animationCount: 5,
-    animations: ['Facebook loader', 'Instagram loader', 'YouTube loader', 'X / Twitter loader', 'TikTok loader'],
+    animations: [
+      { name: 'Facebook', file: '01-fb-glass-loader' },
+      { name: 'Instagram', file: '02-ig-glass-loader' },
+      { name: 'YouTube', file: '03-yt-glass-loader' },
+      { name: 'X / Twitter', file: '04-tw-glass-loader' },
+      { name: 'TikTok', file: '05-tk-glass-loader' },
+    ],
     keywords: [
       'glass morphism animation',
       'social media loader lottie',

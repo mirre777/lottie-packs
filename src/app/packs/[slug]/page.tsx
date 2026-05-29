@@ -13,7 +13,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const pack = getPack(slug)
   if (!pack) return {}
-
   return {
     title: `${pack.name} — ${pack.tagline}`,
     description: pack.description,
@@ -83,112 +82,141 @@ export default async function PackPage({ params }: Props) {
         </nav>
 
         <main className="max-w-6xl mx-auto px-6 py-16">
-          <div className="grid md:grid-cols-2 gap-12 items-start">
 
-            {/* Left — video */}
-            <div className="sticky top-8">
-              <div className="relative aspect-square rounded-2xl overflow-hidden bg-black/50 border border-white/10 scanline">
-                <video
-                  src={pack.previewVideo}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <div className="flex gap-2 mt-3">
-                {pack.formats.map((f) => (
-                  <span key={f} className="text-[10px] font-mono border border-white/10 text-white/40 px-2.5 py-1 rounded-full">
-                    {f}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Right — details */}
+          {/* Header row */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <p className="text-xs font-mono text-white/30 uppercase tracking-widest mb-3">
-                {pack.animationCount} animations
+                {pack.animationCount} animations · JSON · SVG · MP4
               </p>
-              <h1 className="text-4xl md:text-5xl font-black text-white leading-tight mb-4">
+              <h1 className="text-4xl md:text-6xl font-black text-white leading-tight">
                 {pack.name}
               </h1>
-              <p className="text-white/50 text-base leading-relaxed mb-8">
+              <p className="text-white/50 text-base leading-relaxed mt-4 max-w-xl">
                 {pack.description}
               </p>
+            </div>
 
-              {/* Buy CTA */}
+            {/* Buy block */}
+            <div className="shrink-0 flex flex-col gap-2 md:items-end">
               <a
                 href={pack.gumroadUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between w-full bg-white text-black font-bold px-6 py-4 rounded-2xl hover:bg-white/90 transition-colors mb-3"
+                className="inline-flex items-center gap-4 bg-white text-black font-bold px-7 py-4 rounded-full hover:bg-white/90 transition-colors whitespace-nowrap"
               >
-                <span>Buy this pack</span>
-                <span className="text-lg">{pack.currency === 'USD' ? '$' : '€'}{pack.price}</span>
+                Buy this pack
+                <span className="text-base">{pack.currency === 'USD' ? '$' : '€'}{pack.price}</span>
               </a>
               <a
                 href={BUNDLE.gumroadUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between w-full border border-white/10 text-white/60 hover:text-white hover:border-white/20 px-6 py-3.5 rounded-2xl transition-all text-sm mb-10"
+                className="text-xs font-mono text-white/30 hover:text-white/60 transition-colors text-center"
               >
-                <span>Get all 4 packs (bundle)</span>
-                <span>${BUNDLE.price} — save $27</span>
+                Or get all 4 packs for ${BUNDLE.price} →
               </a>
+            </div>
+          </div>
 
-              {/* Animations list */}
-              <div className="mb-8">
-                <h2 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-4">
-                  Included
-                </h2>
-                <ul className="space-y-2">
-                  {pack.animations.map((anim, i) => (
-                    <li key={anim} className="flex items-center gap-3 text-sm text-white/70">
-                      <span className="font-mono text-white/20 text-xs w-5">{String(i + 1).padStart(2, '0')}</span>
-                      <span className="w-px h-3 bg-white/10" />
-                      {anim}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          {/* Animation grid — all 5 visible */}
+          <section className="mb-16">
+            <h2 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-6">
+              All animations
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {pack.animations.map((anim, i) => (
+                <div key={anim.file} className="group flex flex-col">
+                  <div className="relative aspect-square rounded-xl overflow-hidden bg-black/60 border border-white/8 group-hover:border-white/20 transition-colors scanline">
+                    <video
+                      src={`/previews/${anim.file}.mp4`}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-contain"
+                    />
+                    <div className="absolute top-2 left-2 bg-black/60 text-white/40 text-[10px] font-mono px-1.5 py-0.5 rounded">
+                      {String(i + 1).padStart(2, '0')}
+                    </div>
+                  </div>
+                  <p className="text-xs text-white/50 font-mono mt-2 px-0.5">{anim.name}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-              {/* Use cases */}
-              <div className="mb-8">
-                <h2 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-4">
-                  Use cases
-                </h2>
-                <ul className="space-y-1.5">
-                  {pack.useCases.map((u) => (
-                    <li key={u} className="text-sm text-white/50 flex items-center gap-2">
-                      <span className="text-white/20">·</span> {u}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          {/* Details row */}
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            {/* Use cases */}
+            <div className="border border-white/8 rounded-2xl p-6 bg-white/[0.02]">
+              <h2 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-5">
+                Use cases
+              </h2>
+              <ul className="space-y-3">
+                {pack.useCases.map((u) => (
+                  <li key={u} className="text-sm text-white/60 flex items-start gap-3">
+                    <span className="text-white/20 mt-0.5">→</span> {u}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-              {/* Tech details */}
-              <div className="border border-white/8 rounded-xl p-5 bg-white/[0.02] text-xs font-mono space-y-2">
+            {/* Tech specs */}
+            <div className="border border-white/8 rounded-2xl p-6 bg-white/[0.02]">
+              <h2 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-5">
+                Specs
+              </h2>
+              <dl className="space-y-3 text-sm font-mono">
                 {[
                   ['Format', 'Lottie JSON v5.7'],
                   ['Canvas', '512 × 512 px'],
                   ['Framerate', '60 fps'],
                   ['Background', 'Transparent'],
-                  ['License', 'Commercial (unlimited projects)'],
+                  ['Also includes', 'SVG snapshot · MP4 preview'],
+                  ['License', 'Commercial, unlimited projects'],
                 ].map(([k, v]) => (
-                  <div key={k} className="flex justify-between">
-                    <span className="text-white/30">{k}</span>
-                    <span className="text-white/60">{v}</span>
+                  <div key={k} className="flex justify-between gap-4">
+                    <dt className="text-white/30">{k}</dt>
+                    <dd className="text-white/60 text-right">{v}</dd>
                   </div>
                 ))}
-              </div>
+              </dl>
+            </div>
+          </div>
+
+          {/* Second buy CTA */}
+          <div className="border border-white/10 rounded-2xl p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 bg-white/[0.02] mb-20">
+            <div>
+              <p className="text-white/40 text-sm mb-1">Ready to use?</p>
+              <p className="text-white font-bold text-xl">
+                {pack.name} — {pack.currency === 'USD' ? '$' : '€'}{pack.price}
+              </p>
+              <p className="text-white/30 text-xs font-mono mt-1">JSON · SVG · MP4 · Commercial license</p>
+            </div>
+            <div className="flex flex-col gap-2 shrink-0">
+              <a
+                href={pack.gumroadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-black font-bold px-8 py-3.5 rounded-full hover:bg-white/90 transition-colors text-sm"
+              >
+                Buy on Gumroad →
+              </a>
+              <a
+                href={BUNDLE.gumroadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border border-white/10 text-white/50 hover:text-white hover:border-white/20 px-8 py-3 rounded-full transition-all text-xs text-center font-mono"
+              >
+                All 4 packs — ${BUNDLE.price}
+              </a>
             </div>
           </div>
 
           {/* Other packs */}
-          <section className="mt-24">
-            <h2 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-8">
+          <section>
+            <h2 className="text-xs font-mono text-white/30 uppercase tracking-widest mb-6">
               More packs
             </h2>
             <div className="grid sm:grid-cols-3 gap-4">
@@ -196,11 +224,24 @@ export default async function PackPage({ params }: Props) {
                 <Link
                   key={p.slug}
                   href={`/packs/${p.slug}`}
-                  className="group border border-white/8 rounded-xl p-4 hover:border-white/20 hover:bg-white/[0.03] transition-all"
+                  className="group border border-white/8 rounded-xl overflow-hidden hover:border-white/20 transition-all"
                 >
-                  <p className="text-xs text-white/30 font-mono mb-1">{p.animationCount} animations</p>
-                  <p className="text-sm font-bold text-white group-hover:text-white/80">{p.name}</p>
-                  <p className="text-xs text-white/40 mt-1">{p.currency === 'USD' ? '$' : '€'}{p.price}</p>
+                  {/* Mini video preview */}
+                  <div className="aspect-video bg-black overflow-hidden">
+                    <video
+                      src={p.previewVideo}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <p className="text-xs text-white/30 font-mono mb-1">{p.animationCount} animations</p>
+                    <p className="text-sm font-bold text-white group-hover:text-white/80">{p.name}</p>
+                    <p className="text-xs text-white/40 mt-1">{p.currency === 'USD' ? '$' : '€'}{p.price}</p>
+                  </div>
                 </Link>
               ))}
             </div>
